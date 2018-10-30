@@ -15,6 +15,15 @@ function request( [string]$Url, [int]$Timeout, $Options ) {
         }
     }
     
+    if ($Options.CookieStrings) {
+        $cookiejar = New-Object System.Net.CookieContainer
+        $cookiejar.SetCookies($Url, $Options.CookieStrings -join ',')
+        $request.CookieContainer = $cookiejar
+    }
+    if ($Options.CookieContainer) {
+        $request.CookieContainer = $Options.CookieContainer
+    }
+    
     $response = $request.GetResponse()
     $response.Close()
     $response
